@@ -1,1 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+review_results.csv
+.DS_Store
+dist/
+build/
+*.egg-info/
 rich

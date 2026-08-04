@@ -4,15 +4,11 @@ Base interface for AI providers.
 
 from abc import ABC, abstractmethod
 
+from ai_commit_labeler.models import Commit, Prediction
+
 
 class AIProvider(ABC):
-    """
-    Base class for all AI providers.
-    """
 
     @abstractmethod
-    def analyze_commit(self, commit):
-        """
-        Analyze a commit and return a prediction.
-        """
-        raise NotImplementedError
+    def analyze_commit(self, commit: Commit) -> Prediction:
+        pass
