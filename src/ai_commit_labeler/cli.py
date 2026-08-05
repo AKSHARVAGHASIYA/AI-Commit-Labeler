@@ -8,6 +8,11 @@ from ai_commit_labeler.services import ReviewService
 from ai_commit_labeler.storage import CSVWriter
 from ai_commit_labeler.ui import ReviewScreen, ask_user_choice
 from ai_commit_labeler.version import __version__
+from ai_commit_labeler.ui import (
+    ReviewScreen,
+    ask_user_choice,
+    ask_override_label,
+)
 
 app = typer.Typer(add_completion=False)
 
@@ -51,6 +56,23 @@ def review(csv_file: str):
 
             typer.secho("✓ Accepted\n", fg=typer.colors.GREEN)
 
+        elif choice == "O":
+
+            new_label = ask_override_label()
+
+            writer.save(
+                commit=commit,
+                prediction=prediction,
+                final_label=new_label,
+                decision="OVERRIDE",
+            )
+
+            typer.secho(
+                f"✓ Saved as {new_label}\n",
+                fg=typer.colors.CYAN,
+            )
+            
+            
         elif choice == "S":
 
             writer.save(
