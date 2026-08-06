@@ -6,7 +6,7 @@ from pathlib import Path
 
 from ai_commit_labeler.loaders import CSVLoader
 from ai_commit_labeler.models import Commit
-from ai_commit_labeler.providers import MockProvider
+from ai_commit_labeler.providers import RuleProvider
 
 
 class ReviewService:
@@ -16,7 +16,7 @@ class ReviewService:
 
     def __init__(self) -> None:
         self.loader = CSVLoader()
-        self.provider = MockProvider()
+        self.provider = RuleProvider()
 
     def load_commits(self, csv_path: str | Path) -> list[Commit]:
         return self.loader.load(csv_path)

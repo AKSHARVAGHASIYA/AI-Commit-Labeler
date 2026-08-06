@@ -13,6 +13,7 @@ from ai_commit_labeler.ui import (
     ask_user_choice,
     ask_override_label,
 )
+from ai_commit_labeler.ui import ProgressTracker
 
 app = typer.Typer(add_completion=False)
 
@@ -34,6 +35,9 @@ def review(csv_file: str):
     """
 
     commits = review_service.load_commits(csv_file)
+    
+    tracker = ProgressTracker(len(commits))
+    tracker.start()
 
     typer.echo(f"\nLoaded {len(commits)} commits.\n")
 
@@ -53,6 +57,8 @@ def review(csv_file: str):
                 final_label=prediction.label,
                 decision="ACCEPT",
             )
+            
+            tracker.advance()
 
             typer.secho("✓ Accepted\n", fg=typer.colors.GREEN)
 
@@ -66,6 +72,8 @@ def review(csv_file: str):
                 final_label=new_label,
                 decision="OVERRIDE",
             )
+            
+            tracker.advance()
 
             typer.secho(
                 f"✓ Saved as {new_label}\n",
@@ -81,11 +89,15 @@ def review(csv_file: str):
                 final_label=prediction.label,
                 decision="SKIP",
             )
+            
+            tracker.advance()
 
             typer.secho("✓ Skipped\n", fg=typer.colors.YELLOW)
 
         elif choice == "Q":
-
+            
+            tracker.stop()
+            
             typer.secho("Exiting review session...", fg=typer.colors.RED)
             break
 
