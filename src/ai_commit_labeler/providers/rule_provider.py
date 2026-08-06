@@ -19,6 +19,7 @@ class RuleProvider(AIProvider):
             self._bugfix_rule,
             self._feature_rule,
             self._refactor_rule,
+            self._ci_rule,
             self._test_rule,
             self._source_code_rule,
         ]
@@ -141,6 +142,35 @@ class RuleProvider(AIProvider):
                 label="USEFUL",
                 confidence=85,
                 reason="Refactoring or code cleanup detected.",
+            )
+
+        return None
+    
+    def _ci_rule(self, commit: Commit):
+
+        message = commit.commit_message.lower()
+        files = str(commit.changed_filenames).lower()
+
+        keywords = [
+            "workflow",
+            "github actions",
+            "ci",
+            "jenkins",
+            "travis",
+            "circleci",
+            "azure pipeline",
+            "pipeline",
+        ]
+
+        if (
+            any(keyword in message for keyword in keywords)
+            or ".github/workflows" in files
+            or ".github" in files
+        ):
+            return Prediction(
+                label="LOW_VALUE",
+                confidence=90,
+                reason="CI/CD configuration changes detected.",
             )
 
         return None
