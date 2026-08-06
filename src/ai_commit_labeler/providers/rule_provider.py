@@ -21,6 +21,7 @@ class RuleProvider(AIProvider):
             self._refactor_rule,
             self._ci_rule,
             self._configuration_rule,
+            self._security_rule,
             self._test_rule,
             self._source_code_rule,
         ]
@@ -204,6 +205,45 @@ class RuleProvider(AIProvider):
                 label="LOW_VALUE",
                 confidence=88,
                 reason="Configuration changes detected.",
+            )
+
+        return None
+    
+    def _security_rule(self, commit: Commit):
+
+        message = commit.commit_message.lower()
+        files = str(commit.changed_filenames).lower()
+
+        security_keywords = [
+            "security",
+            "vulnerability",
+            "cve",
+            "auth",
+            "authentication",
+            "authorization",
+            "password",
+            "token",
+            "jwt",
+            "encrypt",
+            "encryption",
+            "decrypt",
+            "csrf",
+            "xss",
+            "sql injection",
+            "permission",
+            "oauth",
+            "ssl",
+            "tls",
+        ]
+
+        if (
+            any(keyword in message for keyword in security_keywords)
+            or any(keyword in files for keyword in security_keywords)
+        ):
+            return Prediction(
+                label="USEFUL",
+                confidence=96,
+                reason="Security-related changes detected.",
             )
 
         return None
