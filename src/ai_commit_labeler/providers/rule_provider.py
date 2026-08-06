@@ -18,6 +18,7 @@ class RuleProvider(AIProvider):
             self._dependency_rule,
             self._bugfix_rule,
             self._feature_rule,
+            self._refactor_rule,
             self._test_rule,
             self._source_code_rule,
         ]
@@ -115,6 +116,31 @@ class RuleProvider(AIProvider):
                 label="USEFUL",
                 confidence=92,
                 reason="New feature detected from commit message.",
+            )
+
+        return None
+    
+    def _refactor_rule(self, commit: Commit):
+
+        message = commit.commit_message.lower()
+
+        keywords = [
+            "refactor",
+            "cleanup",
+            "clean up",
+            "rename",
+            "restructure",
+            "reorganize",
+            "simplify",
+            "improve code",
+            "code cleanup",
+        ]
+
+        if any(keyword in message for keyword in keywords):
+            return Prediction(
+                label="USEFUL",
+                confidence=85,
+                reason="Refactoring or code cleanup detected.",
             )
 
         return None
