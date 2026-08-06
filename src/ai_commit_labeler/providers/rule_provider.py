@@ -16,6 +16,8 @@ class RuleProvider(AIProvider):
         rules = [
             self._documentation_rule,
             self._dependency_rule,
+            self._bugfix_rule,
+            self._feature_rule,
             self._test_rule,
             self._source_code_rule,
         ]
@@ -62,6 +64,57 @@ class RuleProvider(AIProvider):
                 label="LOW_VALUE",
                 confidence=92,
                 reason="Dependency update detected.",
+            )
+
+        return None
+    
+    def _bugfix_rule(self, commit: Commit):
+
+        message = commit.commit_message.lower()
+
+        keywords = [
+            "fix",
+            "fixed",
+            "bug",
+            "issue",
+            "resolve",
+            "resolved",
+            "patch",
+            "correct",
+            "repair",
+            "hotfix",
+        ]
+
+        if any(word in message for word in keywords):
+            return Prediction(
+                label="USEFUL",
+                confidence=94,
+                reason="Bug fix detected from commit message.",
+            )
+
+        return None
+
+    def _feature_rule(self, commit: Commit):
+
+        message = commit.commit_message.lower()
+
+        keywords = [
+            "feat",
+            "feature",
+            "add",
+            "added",
+            "implement",
+            "implemented",
+            "introduce",
+            "support",
+            "create",
+        ]
+
+        if any(word in message for word in keywords):
+            return Prediction(
+                label="USEFUL",
+                confidence=92,
+                reason="New feature detected from commit message.",
             )
 
         return None
