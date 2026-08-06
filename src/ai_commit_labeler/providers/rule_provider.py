@@ -20,6 +20,7 @@ class RuleProvider(AIProvider):
             self._feature_rule,
             self._refactor_rule,
             self._ci_rule,
+            self._configuration_rule,
             self._test_rule,
             self._source_code_rule,
         ]
@@ -171,6 +172,38 @@ class RuleProvider(AIProvider):
                 label="LOW_VALUE",
                 confidence=90,
                 reason="CI/CD configuration changes detected.",
+            )
+
+        return None
+    
+    def _configuration_rule(self, commit: Commit):
+
+        files = str(commit.changed_filenames).lower()
+        message = commit.commit_message.lower()
+
+        config_files = [
+            ".toml",
+            ".yaml",
+            ".yml",
+            ".json",
+            ".ini",
+            ".cfg",
+            ".conf",
+            ".env",
+            "dockerfile",
+            "docker-compose",
+            "compose.yml",
+        ]
+
+        if (
+            any(config in files for config in config_files)
+            or "config" in message
+            or "configuration" in message
+        ):
+            return Prediction(
+                label="LOW_VALUE",
+                confidence=88,
+                reason="Configuration changes detected.",
             )
 
         return None
