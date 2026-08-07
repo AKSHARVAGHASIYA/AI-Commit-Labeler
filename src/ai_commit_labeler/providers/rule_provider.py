@@ -11,6 +11,8 @@ from ai_commit_labeler.rules.configuration_rule import ConfigurationRule
 from ai_commit_labeler.rules.security_rule import SecurityRule
 from ai_commit_labeler.rules.test_rule import TestRule
 from ai_commit_labeler.rules.source_code_rule import SourceCodeRule
+from ai_commit_labeler.rules.performance_rule import PerformanceRule
+from ai_commit_labeler.rules.release_rule import ReleaseRule
 
 
 class RuleProvider(AIProvider):
@@ -27,6 +29,8 @@ class RuleProvider(AIProvider):
             SecurityRule(),
             TestRule(),
             SourceCodeRule(),
+            PerformanceRule(),
+            ReleaseRule(),
         ]
 
     def analyze_commit(self, commit):
