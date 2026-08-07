@@ -58,6 +58,7 @@ def review(csv_file: str):
                 final_label=prediction.label,
             )
 
+            tracker.mark_accepted()
             tracker.advance()
 
             typer.secho("✓ Accepted\n", fg=typer.colors.GREEN)
@@ -73,6 +74,7 @@ def review(csv_file: str):
                 final_label=new_label,
             )
 
+            tracker.mark_overridden()
             tracker.advance()
 
             typer.secho(
@@ -89,6 +91,7 @@ def review(csv_file: str):
                 final_label=prediction.label,
             )
 
+            tracker.mark_skipped()
             tracker.advance()
 
             typer.secho("✓ Skipped\n", fg=typer.colors.YELLOW)
@@ -96,6 +99,7 @@ def review(csv_file: str):
         elif choice == "Q":
 
             tracker.stop()
+            tracker.show_summary() 
 
             typer.secho("Exiting review session...", fg=typer.colors.RED)
             break
