@@ -22,3 +22,4 @@ dist/
 
 # Environment
 .env
+reviewed_commits.csv
