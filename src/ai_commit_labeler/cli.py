@@ -33,6 +33,14 @@ def review(csv_file: str):
     """
 
     commits = review_service.load_commits(csv_file)
+    
+    reviewed_shas = review_service.get_reviewed_shas()
+
+    commits = [c for c in commits if c.sha not in reviewed_shas]
+    
+    if len(commits) == 0:
+        print( "✅ All commits already reviewed. Nothing to process.")
+        return
 
     tracker = ProgressTracker(len(commits))
     tracker.start()
@@ -54,11 +62,11 @@ def review(csv_file: str):
             writer.save(
                 commit=commit,
                 prediction=prediction,
-                action="accepted",
                 final_label=prediction.label,
+                decision="ACCEPT",
             )
-
-            tracker.mark_accepted()
+            if prediction.label == prediction.label:
+                tracker.mark_correct()
             tracker.advance()
 
             typer.secho("✓ Accepted\n", fg=typer.colors.GREEN)
@@ -70,8 +78,8 @@ def review(csv_file: str):
             writer.save(
                 commit=commit,
                 prediction=prediction,
-                action="overridden",
                 final_label=new_label,
+                decision="OVERRIDE",
             )
 
             tracker.mark_overridden()
@@ -87,8 +95,8 @@ def review(csv_file: str):
             writer.save(
                 commit=commit,
                 prediction=prediction,
-                action="skipped",
                 final_label=prediction.label,
+                decision="SKIP",
             )
 
             tracker.mark_skipped()

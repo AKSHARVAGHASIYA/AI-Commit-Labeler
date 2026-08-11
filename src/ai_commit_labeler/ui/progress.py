@@ -1,11 +1,4 @@
-"""
-Progress display utilities.
-"""
-
-from rich.console import Console
-from rich.progress import Progress
-
-console = Console()
+import sys
 
 
 class ProgressTracker:
@@ -14,21 +7,22 @@ class ProgressTracker:
         self.total = total
         self.current = 0
 
-        # 🔥 ADD THESE
+        # stats
         self.accepted = 0
         self.overridden = 0
         self.skipped = 0
 
     def start(self):
-        print(f"Starting review of {self.total} commits...\n")
+        self._print_progress()
 
     def advance(self):
         self.current += 1
+        self._print_progress()
 
     def stop(self):
-        print("\nReview stopped.")
+        print()
 
-    # 🔥 ADD THESE METHODS
+    # ✅ NEW METHODS
     def mark_accepted(self):
         self.accepted += 1
 
@@ -40,13 +34,33 @@ class ProgressTracker:
 
     def show_summary(self):
 
-        print("\n" + "=" * 40)
-        print("Review Summary")
-        print("=" * 40)
-
-        total_reviewed = self.accepted + self.overridden + self.skipped
-
-        print(f"Total Reviewed : {total_reviewed}")
+        print("\n\n========== Review Summary ==========")
+        print(f"Total Reviewed : {self.current}")
         print(f"Accepted       : {self.accepted}")
         print(f"Overridden     : {self.overridden}")
         print(f"Skipped        : {self.skipped}")
+
+        if self.current > 0:
+            accuracy = (self.correct_predictions / self.current) * 100
+            override_rate = (self.overridden / self.current) * 100
+        else:
+            accuracy = 0
+            override_rate = 0
+
+        print("\n---------- AI Performance ----------")
+        print(f"AI Accuracy    : {accuracy:.2f}%")
+        print(f"Override Rate  : {override_rate:.2f}%")
+
+        print("====================================")
+
+    def _print_progress(self):
+        percent = int((self.current / self.total) * 100)
+        bar_length = 30
+        filled_length = int(bar_length * self.current // self.total)
+
+        bar = "█" * filled_length + "-" * (bar_length - filled_length)
+
+        sys.stdout.write(
+            f"\rProgress: |{bar}| {percent}% ({self.current}/{self.total})"
+        )
+        sys.stdout.flush()

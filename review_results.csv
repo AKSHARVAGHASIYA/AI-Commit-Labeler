@@ -39,3 +39,13 @@ django/django,719386e876073ed7f3a0a5abdb40058e7a4402a4,USEFUL,USEFUL,92,SKIP
 psf/requests,a2ce3d8ace060b0c8446bc956e3853806dd4e3bb,LOW_VALUE,LOW_VALUE,90,SKIP
 django/django,be8d1b628533ac38d2771356e92ade1d61d3f059,USEFUL,USEFUL,94,SKIP
 django/django,4bbc27c8686f10f9556cef02dbfa9f5157fbcf56,USEFUL,USEFUL,94,SKIP
+tiangolo/sqlmodel,71da0f5cef9c0dd6528889f7b0436f390e9697e5,"📝 Update release notes
+
+[skip ci]",LOW_VALUE,90,LOW_VALUE,ACCEPT
+tiangolo/sqlmodel,71da0f5cef9c0dd6528889f7b0436f390e9697e5,"📝 Update release notes
+
+[skip ci]",LOW_VALUE,90,LOW_VALUE,ACCEPT
+tiangolo/sqlmodel,71da0f5cef9c0dd6528889f7b0436f390e9697e5,"📝 Update release notes
+
+[skip ci]",LOW_VALUE,90,LOW_VALUE,ACCEPT
+encode/httpx,544038155382473ce87b17ef2238c96e48dee700,Update CHANGELOG.md (#3374),LOW_VALUE,90,LOW_VALUE,SKIP

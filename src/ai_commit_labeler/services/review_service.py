@@ -29,3 +29,21 @@ class ReviewService:
         prediction = self.provider.analyze_commit(commit)
 
         return prediction
+    
+    def get_reviewed_shas(self, output_file="review_results.csv"):
+        import csv
+        from pathlib import Path
+
+        reviewed = set()
+
+        file_path = Path(output_file)
+
+        if not file_path.exists():
+            return reviewed
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                reviewed.add(row["sha"])
+
+        return reviewed

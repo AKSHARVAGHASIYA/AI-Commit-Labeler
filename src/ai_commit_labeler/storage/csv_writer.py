@@ -4,11 +4,9 @@ from pathlib import Path
 
 class CSVWriter:
 
-    def __init__(self, output_file="
-                 reviewed_commits.csv"):
+    def __init__(self, output_file="review_results.csv"):
         self.output_file = Path(output_file)
 
-        # Create file with header if not exists
         if not self.output_file.exists():
             with open(self.output_file, "w", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
@@ -22,7 +20,7 @@ class CSVWriter:
                     "action",
                 ])
 
-    def save(self, commit, prediction, action, final_label):
+    def save(self, commit, prediction, final_label, decision):
 
         with open(self.output_file, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
@@ -34,5 +32,5 @@ class CSVWriter:
                 prediction.label,
                 prediction.confidence,
                 final_label,
-                action,
+                decision,
             ])
